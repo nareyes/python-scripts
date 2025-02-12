@@ -1,6 +1,6 @@
 import sys
 import random
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit
 from PyQt5.QtCore import QTimer
 
 class RandomNoteApp(QWidget):
@@ -8,16 +8,16 @@ class RandomNoteApp(QWidget):
     A PyQt5 application that displays random musical notes at a user-specified interval.
     
     Features:
-    - Choose between all musical notes or only whole notes.
+    - Choose between all musical notes or only natural notes.
     - Adjustable time interval between note displays (default: 10 seconds).
     - Simple UI with buttons to start and exit the application.
     """
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Random Music Note")
+        self.setWindowTitle("Random Music Notes")
         self.setGeometry(100, 100, 400, 300)
         
-        self.whole_notes = ["A", "B", "C", "D", "E", "F", "G"]
+        self.natural_notes = ["A", "B", "C", "D", "E", "F", "G"]
         self.all_notes = ["A", "A#", "Bb", "B", "C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#", "Ab"]
         self.current_notes = []
         self.interval = 10  # default interval in seconds
@@ -28,21 +28,24 @@ class RandomNoteApp(QWidget):
         self.label.setStyleSheet("font-size: 40px; text-align: center;")
         self.layout.addWidget(self.label)
 
+        # create a horizontal layout for the interval input
+        interval_layout = QHBoxLayout()
         self.interval_label = QLabel("Time Interval (Seconds):", self)
-        self.layout.addWidget(self.interval_label)
-        
         self.interval_input = QLineEdit(self)
         self.interval_input.setPlaceholderText("Enter interval (Seconds)")
         self.interval_input.setText(str(self.interval))
-        self.layout.addWidget(self.interval_input)
-        
+
+        interval_layout.addWidget(self.interval_label)
+        interval_layout.addWidget(self.interval_input)
+        self.layout.addLayout(interval_layout)  # add the horizontal layout to the main vertical layout
+
         self.all_notes_button = QPushButton("All Notes", self)
         self.all_notes_button.clicked.connect(lambda: self.start_game(self.all_notes))
         self.layout.addWidget(self.all_notes_button)
         
-        self.whole_notes_button = QPushButton("Whole Notes", self)
-        self.whole_notes_button.clicked.connect(lambda: self.start_game(self.whole_notes))
-        self.layout.addWidget(self.whole_notes_button)
+        self.natural_notes_button = QPushButton("Natural Notes", self)
+        self.natural_notes_button.clicked.connect(lambda: self.start_game(self.natural_notes))
+        self.layout.addWidget(self.natural_notes_button)
         
         self.exit_button = QPushButton("Exit", self)
         self.exit_button.clicked.connect(self.close)
